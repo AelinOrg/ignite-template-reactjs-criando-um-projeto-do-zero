@@ -1,3 +1,23 @@
+@use 'common.module';
+
+$white: #f8f8f8;
+$gray-300: #d7d7d7;
+$gray-400: #bbb;
+$gray-900: #1a1d23;
+
+$max-width: 900px;
+
+:root {
+  --primary: #ff57b2;
+
+  --white: #{$white};
+  --gray-300: #{$gray-300};
+  --gray-400: #{$gray-400};
+  --gray-900: #{$gray-900};
+
+  --max-width: #{$max-width};
+}
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -5,3 +25,19 @@
 }
 
 // TODO
+
+body {
+  background: var(--gray-900);
+  padding: 0 2rem;
+  font: 400 1rem 'Inter', sans-serif;
+  color: var(--white);
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
