@@ -6,17 +6,14 @@
     .banner {
       width: 100vw;
       margin-left: calc(-50vw + 50%);
+      margin-bottom: 5rem;
       overflow: hidden;
 
       img {
         width: 100%;
         margin: 0 auto;
-        object-fit: contain;
+        object-fit: cover;
       }
-    }
-
-    .banner {
-      margin-bottom: 5rem;
     }
 
     h1 {

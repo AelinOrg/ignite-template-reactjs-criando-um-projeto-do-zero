@@ -77,21 +77,25 @@ export default function Post({
             )}
 
             <h1>{title}</h1>
+
             <div className={commonStyles.postMeta}>
-              <span>
-                <AiOutlineCalendar strokeWidth="50" size="20" />
-                {createdAt}
-              </span>
-              <span>
-                <FiUser strokeWidth="3" size="20" />
-                {author}
-              </span>
-              <span>
-                <FaRegClock strokeWidth="3" size="20" />
-                {timeReading} min
-              </span>
+              <div className={commonStyles.responsiveBreakLine}>
+                <span>
+                  <AiOutlineCalendar strokeWidth="50" size="20" />
+                  {createdAt}
+                </span>
+                <span>
+                  <FiUser strokeWidth="3" size="20" />
+                  {author}
+                </span>
+                <span>
+                  <FaRegClock strokeWidth="3" size="20" />
+                  {timeReading} min
+                </span>
+              </div>
             </div>
           </header>
+
           <article className={styles.article}>
             {content.map(({ heading, body }) => (
               <section key={heading}>
@@ -114,11 +118,12 @@ export default function Post({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient();
+
   const posts = await prismic.query(
     Prismic.predicates.at('document.type', 'posts')
-  );
 
-  // TODO
+    // TODO
+  );
   return {
     paths: posts.results.map(post => ({ params: { slug: post.uid } })),
     fallback: true,
@@ -128,22 +133,16 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params: { slug } }) => {
   const prismic = getPrismicClient();
 
-  try {
-    const post = (await prismic.getByUID('posts', String(slug), {})) as Post;
+  const post = (await prismic.getByUID('posts', String(slug), {})) as Post;
 
-    // TODO
-    return {
-      props: {
-        post,
+  // TODO
+  return {
+    props: {
+      post: {
+        ...post,
+        data: { ...post.data, author: post.data.author ?? 'Unknown' },
       },
-      revalidate: 60, // 1 minuto
-    };
-  } catch {
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-  }
+    },
+    revalidate: 60 * 60 * 24, // 24 horas
+  };
 };

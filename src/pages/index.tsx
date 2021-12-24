@@ -59,17 +59,12 @@ export default function Home({
   const [nextPage, setNextPage] = useState<string | null>(next_page);
 
   async function getNextPost(): Promise<void> {
-    try {
-      const data: ApiSearchResponse = await fetch(nextPage).then(
-        async response => response.json()
-      );
+    const data: ApiSearchResponse = await fetch(nextPage).then(async response =>
+      response.json()
+    );
 
-      setPosts([...posts, ...formatPosts(data.results)]);
-      setNextPage(data.next_page);
-    } catch (error) {
-      // eslint-disable-next-line no-console
-      console.error(error);
-    }
+    setPosts([...posts, ...formatPosts(data.results)]);
+    setNextPage(data.next_page);
   }
 
   return (
@@ -86,14 +81,16 @@ export default function Home({
                 {post.data.subtitle && <p>{post.data.subtitle}</p>}
 
                 <div className={commonStyles.postMeta}>
-                  <span>
-                    <AiOutlineCalendar strokeWidth="50" size="20" />
-                    {post.first_publication_date}
-                  </span>
-                  <span>
-                    <FiUser strokeWidth="3" size="20" />
-                    {post.data.author}
-                  </span>
+                  <div>
+                    <span>
+                      <AiOutlineCalendar strokeWidth="50" size="20" />
+                      {post.first_publication_date}
+                    </span>
+                    <span>
+                      <FiUser strokeWidth="3" size="20" />
+                      {post.data.author}
+                    </span>
+                  </div>
                 </div>
               </a>
             </Link>
@@ -130,5 +127,6 @@ export const getStaticProps: GetStaticProps = async () => {
         results: posts,
       },
     },
+    revalidate: 60, // 1 minuto
   };
 };

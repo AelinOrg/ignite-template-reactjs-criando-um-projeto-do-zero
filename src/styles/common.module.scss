@@ -1,25 +1,42 @@
 // TODO
 
+$post-meta-gap: 1.5rem;
+
 .commonContainer {
   max-width: var(--max-width);
   width: 100%;
   margin: 0 auto 5rem;
+  padding: 0 2rem;
 }
 
 .postMeta {
-  color: var(--gray-400);
-  margin-top: 1.563rem;
+  margin-top: 1.5rem;
 
-  &,
-  span {
-    display: flex;
+  div {
+    display: inline-flex;
+    flex-wrap: wrap;
+
+    color: var(--gray-400);
+    margin: calc(-1 * $post-meta-gap) 0 0 calc(-1 * $post-meta-gap);
+    width: calc(100% + $post-meta-gap);
+
+    span {
+      display: flex;
+      margin: $post-meta-gap 0 0 $post-meta-gap;
+
+      svg {
+        margin-right: 0.5rem;
+      }
+    }
+
+    &.responsiveBreakLine {
+      flex-direction: column;
+    }
   }
+}
 
-  span + span {
-    margin-left: 1.5rem;
-  }
-
-  span svg {
-    margin-right: 0.5rem;
+@media (min-width: 600px) {
+  .postMeta div.responsiveBreakLine {
+    flex-direction: row;
   }
 }
