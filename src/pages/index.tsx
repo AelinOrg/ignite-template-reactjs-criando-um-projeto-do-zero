@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { AiOutlineCalendar } from 'react-icons/ai';
 import { FiUser } from 'react-icons/fi';
 import ptBR from 'date-fns/locale/pt-BR';
+import Prismic from '@prismicio/client';
+import { useState } from 'react';
+import ApiSearchResponse from '@prismicio/client/types/ApiSearchResponse';
 import { getPrismicClient } from '../services/prismic';
 
 import commonStyles from '../styles/common.module.scss';
@@ -30,71 +33,102 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-export default function Home(): JSX.Element {
+function formatPosts(posts: Post[]): Post[] {
+  return posts.map(post => ({
+    uid: post.uid,
+    first_publication_date: format(
+      new Date(post.first_publication_date),
+      'dd LLL yyyy',
+      {
+        locale: ptBR,
+      }
+    ),
+    data: {
+      title: post.data.title,
+      subtitle: post.data.subtitle,
+      author: post.data.author ?? 'Unknown',
+    },
+  }));
+}
+
+export default function Home({
+  postsPagination: { results, next_page },
+}: HomeProps): JSX.Element {
   // TODO
-  const fakePosts: Post[] = [
-    {
-      uid: '123',
-      first_publication_date: '2021-12-22T02:17:19.364Z',
-      data: {
-        author: 'J.K. Rowling',
-        title: 'Como utilizar Hooks',
-        subtitle: 'Pensando em sincronização em vez de ciclos de vida.',
-      },
-    },
-    {
-      uid: '123',
-      first_publication_date: '2021-12-22T02:17:19.364Z',
-      data: {
-        author: 'J.K. Rowling',
-        title: 'Criando um app CRA do zero',
-        subtitle:
-          'Tudo sobre como criar a sua primeira aplicação utilizando Create React App.',
-      },
-    },
-  ];
+  const [posts, setPosts] = useState<Post[]>(formatPosts(results));
+  const [nextPage, setNextPage] = useState<string | null>(next_page);
+
+  async function getNextPost(): Promise<void> {
+    try {
+      const data: ApiSearchResponse = await fetch(nextPage).then(
+        async response => response.json()
+      );
+
+      setPosts([...posts, ...formatPosts(data.results)]);
+      setNextPage(data.next_page);
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error);
+    }
+  }
 
   return (
     <>
       <Head>
-        <title>spacetraveling | Home</title>
+        <title>Home | spacetraveling</title>
       </Head>
       <main className={`${commonStyles.commonContainer} ${styles.container}`}>
         <div>
-          {fakePosts.map(post => (
-            <Link href="#nowhere" key={post.uid}>
+          {posts.map(post => (
+            <Link href={`/post/${post.uid}`} key={post.uid}>
               <a>
                 <h2>{post.data.title}</h2>
-                <p>{post.data.subtitle}</p>
+                {post.data.subtitle && <p>{post.data.subtitle}</p>}
 
-                <div>
+                <div className={commonStyles.postMeta}>
                   <span>
                     <AiOutlineCalendar strokeWidth="50" size="20" />
-                    {post.data.author}
+                    {post.first_publication_date}
                   </span>
                   <span>
                     <FiUser strokeWidth="3" size="20" />
-                    {format(
-                      new Date(post.first_publication_date),
-                      'dd LLL yyyy',
-                      {
-                        locale: ptBR,
-                      }
-                    )}
+                    {post.data.author}
                   </span>
                 </div>
               </a>
             </Link>
           ))}
+
+          {nextPage && (
+            <button onClick={getNextPost} type="button">
+              Carregar mais posts
+            </button>
+          )}
         </div>
       </main>
     </>
   );
 }
 
-// export const getStaticProps = async () => {
-//   // const prismic = getPrismicClient();
-//   // const postsResponse = await prismic.query(TODO);
+export const getStaticProps: GetStaticProps = async () => {
+  const prismic = getPrismicClient();
+  const postsResponse = await prismic.query(
+    [Prismic.predicates.at('document.type', 'posts')],
+    {
+      fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
+      pageSize: 2,
+    }
+  );
 
-//   // TODO
-// };
+  const posts: Post[] = postsResponse.results;
+
+  // TODO
+  return {
+    props: {
+      postsPagination: {
+        next_page: postsResponse.next_page,
+        results: posts,
+      },
+    },
+  };
+};

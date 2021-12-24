@@ -1,8 +1,25 @@
 // TODO
 
-$max-width: 1220px;
-
 .commonContainer {
   max-width: var(--max-width);
-  margin: 0 auto;
+  width: 100%;
+  margin: 0 auto 5rem;
+}
+
+.postMeta {
+  color: var(--gray-400);
+  margin-top: 1.563rem;
+
+  &,
+  span {
+    display: flex;
+  }
+
+  span + span {
+    margin-left: 1.5rem;
+  }
+
+  span svg {
+    margin-right: 0.5rem;
+  }
 }

@@ -3,6 +3,7 @@
   a {
     display: flex;
     flex-direction: column;
+    align-items: self-start;
 
     transition: color 0.2s;
 
@@ -11,37 +12,31 @@
     }
 
     h2 {
-      font-size: 2.125rem;
+      font-size: 1.75rem;
+      font-weight: 700;
     }
 
     p {
-      margin: 0.5rem 0 1.563rem;
       font-size: 1.125rem;
+      margin-top: 0.5rem;
       color: var(--gray-300);
-    }
-
-    div {
-      &,
-      span {
-        display: flex;
-        flex-direction: row;
-      }
-
-      span {
-        color: var(--gray-400);
-      }
-
-      span + span {
-        margin-left: 1.5rem;
-      }
-
-      span svg {
-        margin-right: 0.5rem;
-      }
     }
   }
 
   a + a {
     margin-top: 3rem;
+  }
+
+  button {
+    margin-top: 4rem;
+    color: var(--primary);
+    font-size: 1.125rem;
+    font-weight: 600;
+
+    transition: filter 0.2s;
+
+    &:hover {
+      filter: brightness(0.8);
+    }
   }
 }

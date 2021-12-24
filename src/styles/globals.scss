@@ -1,21 +1,14 @@
 @use 'common.module';
 
-$white: #f8f8f8;
-$gray-300: #d7d7d7;
-$gray-400: #bbb;
-$gray-900: #1a1d23;
-
-$max-width: 900px;
-
 :root {
   --primary: #ff57b2;
 
-  --white: #{$white};
-  --gray-300: #{$gray-300};
-  --gray-400: #{$gray-400};
-  --gray-900: #{$gray-900};
+  --white: #f8f8f8;
+  --gray-300: #d7d7d7;
+  --gray-400: #bbb;
+  --gray-900: #1a1d23;
 
-  --max-width: #{$max-width};
+  --max-width: 700px;
 }
 
 * {
@@ -29,12 +22,19 @@ $max-width: 900px;
 body {
   background: var(--gray-900);
   padding: 0 2rem;
-  font: 400 1rem 'Inter', sans-serif;
+  overflow-x: hidden;
+}
+
+body,
+button {
   color: var(--white);
+  font: 400 1rem 'Inter', sans-serif;
 }
 
 button {
   cursor: pointer;
+  background: transparent;
+  border: 0;
 }
 
 a {

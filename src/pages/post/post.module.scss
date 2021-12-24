@@ -1,1 +1,82 @@
 // TODO
+.container {
+  .header {
+    margin-bottom: 4rem;
+
+    .banner {
+      width: 100vw;
+      margin-left: calc(-50vw + 50%);
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        margin: 0 auto;
+        object-fit: contain;
+      }
+    }
+
+    .banner {
+      margin-bottom: 5rem;
+    }
+
+    h1 {
+      margin-bottom: 1.5rem;
+    }
+
+    .postMeta {
+      color: var(--gray-400);
+      margin-top: 1.563rem;
+
+      &,
+      span {
+        display: flex;
+      }
+
+      span + span {
+        margin-left: 1.5rem;
+      }
+
+      span svg {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+
+  .article {
+    section {
+      text-align: justify;
+
+      h2 {
+        margin-bottom: 2rem;
+      }
+
+      p,
+      ul {
+        margin: 1.5rem 0;
+      }
+
+      ul {
+        padding-left: 1.25rem;
+
+        li {
+          margin: 0.5rem 0;
+        }
+      }
+
+      img {
+        width: 100%;
+      }
+    }
+
+    section + section {
+      margin-top: 5rem;
+    }
+  }
+}
+
+.loading {
+  position: absolute;
+  transform: translate(50%, 50%);
+  bottom: 50%;
+  right: 50%;
+}
